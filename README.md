@@ -1,6 +1,8 @@
-# ico 
+# ICO
 
-  ICO file format in Ruby
+ICO file format in Ruby
+  
+[![Gem Version](https://badge.fury.io/rb/ico.svg)](https://badge.fury.io/rb/ico)
 
 ## Usage
 
