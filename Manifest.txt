@@ -1,0 +1,17 @@
+.autotest
+.gitignore
+.hoeignore
+Gemfile
+History.txt
+LICENSE
+Manifest.txt
+README.md
+Rakefile
+lib/core_ext/array/extract_options.rb
+lib/ico.rb
+lib/ico/icon_dir.rb
+lib/ico/icon_dir_entry.rb
+lib/ico/icon_image.rb
+lib/ico/utils.rb
+lib/ico/version.rb
+lib/tasks/ico.rake

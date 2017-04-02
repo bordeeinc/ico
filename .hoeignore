@@ -1,0 +1,11 @@
+test/*
+bin/*
+.git/*
+
+*.swp
+.*.swp
+**/*.swp
+**/.*.swp
+
+.DS_Store
+**/.DS_Store
