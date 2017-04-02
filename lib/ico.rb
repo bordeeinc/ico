@@ -32,23 +32,28 @@ module ICO
     # ensure .png extensions
     raise "more than PNG format files in #{filename_array.inspect}" if ICO::Utils.contains_other_than_ext?(fn_array, :png)
 
+    fn_array_length       = fn_array.length
     icon_dir              = ICO::IconDir.new
     icon_dir.image_count  = fn_array.length
-    offset                = ICO::IconDir::LENGTH_IN_BYTES + (fn_array.length * ICO::IconDirEntry::LENGTH_IN_BYTES)
-    entries               = fn_array.inject({}) {|h,fn| h[fn] = ICO::IconDirEntry.new; h}
-    images                = fn_array.inject({}) {|h,fn| h[fn] = ICO::IconImage.new; h}
-    images_hash           = ICO::Utils.sizes_hash(fn_array, true, true)
+    offset                = ICO::IconDir::LENGTH_IN_BYTES + (fn_array_length * ICO::IconDirEntry::LENGTH_IN_BYTES)
+    entries               = Array.new(fn_array_length) {ICO::IconDirEntry.new}
+    images                = Array.new(fn_array_length) {ICO::IconImage.new}
+    # reorder by image size
+    images_array          = ICO::Utils.sizes_hash(fn_array, true, true).values
 
-    images_hash.each do |size,fn| 
+    images_array.each_with_index do |fn,i| 
       img                 = ChunkyPNG::Image.from_file(fn)
+      #img_hash            = BMP::Utils.parse_image(img, ICO::IconImage::HEADER_SIZE_IN_BYTES)
       img_hash            = BMP::Utils.parse_image(img)
+      file_size           = img_hash[:image_size] + ICO::IconImage::HEADER_SIZE_IN_BYTES
 
-      entry               = entries[fn]
-      image               = images[fn]
+      entry               = entries[i]
+      image               = images[i]
 
       entry.width         = img_hash[:image_width] 
       entry.height        = img_hash[:image_height] 
-      entry.bytes_in_res  = img_hash[:file_size] 
+      #entry.bytes_in_res  = img_hash[:file_size] 
+      entry.bytes_in_res  = file_size
       entry.image_offset  = offset
 
       image.width         = img_hash[:image_width]
@@ -56,14 +61,12 @@ module ICO
       image.size_image    = img_hash[:image_size]  
       image.data          = img_hash[:pixel_array] 
 
-      offset              += img_hash[:file_size]
+      #offset              += img_hash[:file_size]
+      offset              += file_size
     end
 
-    # IconDirEntry section as binary data string
-    icon_dir.data         = images_hash.inject('') {|str,(k,v)| str += entries.fetch(v); str}
-
-    # IconImage section as binary data string
-    icon_dir.data         += images_hash.inject('') {|str,(k,v)| str += images.fetch(v); str}
+    # IconDirEntry + IconImage section as binary data string
+    icon_dir.data         = entries.join + images.join
 
     icon_dir
   end

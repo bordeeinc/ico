@@ -79,7 +79,7 @@ class TestIco < Minitest::Test
     refute File.exist?(output_filename)
     refute Dir.exist?(sizes_dirname)
 
-    sizes_array       = [16,24,32]
+    sizes_array       = [32,16,24]
     resp_exp          = output_filename
     resp_act          = ICO.png_resize_to_ico(input_filename, sizes_array, output_filename)
 
