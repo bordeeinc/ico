@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
-# stub: ico 0.1.1 ruby lib
+# stub: ico 0.1.2 ruby lib
 
 Gem::Specification.new do |s|
   s.name = "ico"
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["So Awesome Man"]
-  s.date = "2017-04-02"
+  s.date = "2017-04-03"
   s.description = "ICO file format in Ruby"
   s.email = "support@bordee.com"
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.md", "History.txt"]

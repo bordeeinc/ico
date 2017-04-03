@@ -45,28 +45,28 @@ module ICO
       img                 = ChunkyPNG::Image.from_file(fn)
       #img_hash            = BMP::Utils.parse_image(img, ICO::IconImage::HEADER_SIZE_IN_BYTES)
       img_hash            = BMP::Utils.parse_image(img)
-      file_size           = img_hash[:image_size] + ICO::IconImage::HEADER_SIZE_IN_BYTES
+      mask_size           = img_hash[:image_width] * 4
+      mask                = "\x00\x00\x00\x00" * img_hash[:image_width]
+      image_size          = (img_hash[:image_width] * img_hash[:image_height] * 4) + mask_size
+      file_size           = image_size + ICO::IconImage::HEADER_SIZE_IN_BYTES 
 
       entry               = entries[i]
-      image               = images[i]
-
       entry.width         = img_hash[:image_width] 
       entry.height        = img_hash[:image_height] 
-      #entry.bytes_in_res  = img_hash[:file_size] 
       entry.bytes_in_res  = file_size
       entry.image_offset  = offset
 
+      image               = images[i]
       image.width         = img_hash[:image_width]
       image.height        = (img_hash[:image_height] * 2)
-      image.size_image    = img_hash[:image_size]  
-      image.data          = img_hash[:pixel_array] 
+      image.size_image    = image_size
+      image.data          = img_hash[:pixel_array] + mask
 
-      #offset              += img_hash[:file_size]
       offset              += file_size
     end
 
     # IconDirEntry + IconImage section as binary data string
-    icon_dir.data         = entries.join + images.join
+    icon_dir.data         =  entries.join + images.join
 
     icon_dir
   end

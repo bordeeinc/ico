@@ -3,7 +3,7 @@ require 'minitest/spec'
 require "minitest/autorun"
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require "ico"
-#require 'FileUtils' unless Object.const_defined?('FileUtils')
+require 'FileUtils' unless Object.const_defined?('FileUtils')
 
 def clear_dir_except_dot_keep(dir)
   dir_glob = Dir.glob(File.join(dir, '*'))
